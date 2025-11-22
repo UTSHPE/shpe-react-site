@@ -6,6 +6,44 @@ This README provides an overview of the project, its purpose, and development wo
 
 ---
 
+# UTSHPE React Website
+
+This repository contains the React-based website for the UTSHPE organization. It uses:
+
+* **React** (with TypeScript)
+* **Create React App (CRA)**
+* **Tailwind CSS 3.4.17**
+* **Framer Motion**
+* **React Router DOM**
+* **Lucide React Icons**
+
+---
+
+## Getting Started
+
+Clone the repository:
+
+```bash
+git clone {GITHUB_URL_SSH_OR_HTTPS}
+cd utshpe-react-site
+```
+
+Install the necessary dependencies from the package-lock.json file by running the following command:
+
+```bash
+npm install
+```
+
+## Running the local DEV site
+
+To run the development server, run the following command:
+
+```bash
+npm start
+```
+
+---
+
 ## 🌟 Project Overview
 
 * **Purpose:** To serve as the official online presence of UT SHPE, featuring event information, office hours, a calendar, and more.
@@ -46,7 +84,7 @@ All other branches must follow one of these naming conventions:
    dev_{first_name}
    ```
 
-   Example: `dev_jordan`
+   Example: `dev_jake`
 
 2. **Feature branch:**
 
@@ -95,10 +133,10 @@ All other branches must follow one of these naming conventions:
 
 ## 👥 Contributors
 
-We welcome contributions from all UT SHPE members and collaborators. Please follow the workflow and branch naming conventions to ensure smooth development and deployment.
+We welcome contribution from all collaborators. Please follow the workflow and branch naming conventions to ensure smooth development and deployment.
 
 ---
 
-## 📜 License
+## 📄 License
 
 This project is intended for UT SHPE use and internal development. Please contact the project maintainers before using code externally.
