@@ -20,6 +20,7 @@ export type CardNavItem = {
 export interface CardNavProps {
   logo: string;
   logoAlt?: string;
+  logoHref?: string;
   items: CardNavItem[];
   className?: string;
   ease?: string;
@@ -32,6 +33,7 @@ export interface CardNavProps {
 const CardNav: React.FC<CardNavProps> = ({
   logo,
   logoAlt = 'Logo',
+  logoHref,
   items,
   className = '',
   ease = 'power3.out',
@@ -172,8 +174,15 @@ const CardNav: React.FC<CardNavProps> = ({
           </div>
 
           <div className="logo-container">
+          {logoHref ? (
+            <a href={logoHref}>
+              <img src={logo} alt={logoAlt} className="logo" />
+            </a>
+          ) : (
             <img src={logo} alt={logoAlt} className="logo" />
-          </div>
+          )}
+        </div>
+
 
           <button
             type="button"
