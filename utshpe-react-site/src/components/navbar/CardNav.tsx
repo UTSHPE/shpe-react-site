@@ -199,13 +199,13 @@ const CardNav: React.FC<CardNavProps> = ({
             )}
           </div>
 
-          <button
-            type="button"
-            className="card-nav-cta-button"
-            style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
-          >
-            Get Started
-          </button>
+          <Link
+          to="/membership"
+          className="card-nav-cta-button"
+          style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
+        >
+          Join Now!
+        </Link>
         </div>
 
         <div className="card-nav-content" aria-hidden={!isExpanded}>

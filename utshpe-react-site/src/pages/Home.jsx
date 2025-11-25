@@ -1,6 +1,7 @@
 //node_module imports
 import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { motion } from "framer-motion";
 import { EffectCoverflow, Autoplay, Navigation} from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
@@ -129,52 +130,66 @@ function Home() {
       {/* MAIN CONTENT */}
       {showMainContent && (
         <>
-          <main className="w-full flex flex-col gap-24 mt-12">
+          <main className="w-full flex flex-col gap-24">
 
-            {/* HERO with Background Slideshow */}
-            <section className="relative w-full h-[70vh] sm:h-[80vh] flex items-center justify-center text-center overflow-hidden">
-
-              {/* Background Slideshow */}
-              <div className="absolute inset-0 w-full h-full slideshow-container">
-                <div className="slide bg-cover bg-center" style={{ backgroundImage: `url(${slide1})` }}></div>
-                <div className="slide bg-cover bg-center" style={{ backgroundImage: `url(${slide2})` }}></div>
-                <div className="slide bg-cover bg-center" style={{ backgroundImage: `url(${slide3})` }}></div>
-                <div className="slide bg-cover bg-center" style={{ backgroundImage: `url(${slide4})` }}></div>
-                <div className="slide bg-cover bg-center" style={{ backgroundImage: `url(${slide5})` }}></div>
-                <div className="slide bg-cover bg-center" style={{ backgroundImage: `url(${slide6})` }}></div>
-              </div>
-
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-
-              {/* HERO CONTENT */}
-              <div className="relative z-10 max-w-3xl text-white px-6 animate-fadeUp">
-                <h2 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-[#FD652F] to-[#72A9BE] bg-clip-text text-transparent drop-shadow-lg">
+            {/* HOME PAGE HERO*/}
+            <motion.section
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8 }}
+              className="w-full py-16 md:py-20 px-6 bg-gradient-to-r from-[#FD652F] to-[#72A9BE] text-white flex flex-col md:flex-row items-center justify-center gap-10"
+            >
+              {/* TEXT SECTION */}
+              <div className="md:w-1/2 text-center md:text-left">
+                <motion.h1
+                  initial={{ y: -30, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2, duration: 0.6 }}
+                  className="text-4xl md:text-5xl font-extrabold mb-6"
+                >
                   UT SHPE
-                </h2>
+                </motion.h1>
 
-                <h3 className="text-2xl mb-4 text-[#72A9BE] font-semibold drop-shadow">
-                  The University of Texas at Austin
-                </h3>
-
-                <p className="text-lg text-white/90 max-w-xl mx-auto drop-shadow">
+                <motion.p
+                  initial={{ y: 30, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.4, duration: 0.6 }}
+                  className="text-lg md:text-xl"
+                >
                   Empowering Hispanic students in STEM through community, mentorship,
                   and professional development.
-                </p>
+                </motion.p>
               </div>
 
-              {/* Animations + Slideshow CSS */}
+              {/* RIGHT SIDE */}
+              <motion.div
+                className="md:w-1/2 w-full h-[300px] sm:h-[350px] md:h-[400px] relative rounded-xl overflow-hidden shadow-2xl"
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.6, duration: 0.8 }}
+              >
+                <div className="absolute inset-0 w-full h-full slideshow-container">
+                  <div className="slide bg-cover bg-center" style={{ backgroundImage: `url(${slide1})` }}></div>
+                  <div className="slide bg-cover bg-center" style={{ backgroundImage: `url(${slide2})` }}></div>
+                  <div className="slide bg-cover bg-center" style={{ backgroundImage: `url(${slide3})` }}></div>
+                  <div className="slide bg-cover bg-center" style={{ backgroundImage: `url(${slide4})` }}></div>
+                  <div className="slide bg-cover bg-center" style={{ backgroundImage: `url(${slide5})` }}></div>
+                  <div className="slide bg-cover bg-center" style={{ backgroundImage: `url(${slide6})` }}></div>
+                </div>
+
+                <div className="absolute inset-0 bg-black/20"></div>
+              </motion.div>
+
+              {/* Slideshow CSS*/}
               <style>{`
-                /* Fade Up */
-                @keyframes fadeUp {
-                  0% { opacity: 0; transform: translateY(20px); }
-                  100% { opacity: 1; transform: translateY(0); }
-                }
-                .animate-fadeUp {
-                  animation: fadeUp 1.2s ease-out forwards;
+                @keyframes fadeSlideshow {
+                  0% { opacity: 0; }
+                  8% { opacity: 1; }
+                  33% { opacity: 1; }
+                  41% { opacity: 0; }
+                  100% { opacity: 0; }
                 }
 
-                /* Slideshow Core */
                 .slideshow-container {
                   position: absolute;
                   inset: 0;
@@ -190,69 +205,59 @@ function Home() {
                   transition: opacity 1s ease-in-out;
                 }
 
-                /* Each slide has a different delay to stagger the fade */
                 .slide:nth-child(1) { animation-delay: 0s; }
                 .slide:nth-child(2) { animation-delay: 6s; }
                 .slide:nth-child(3) { animation-delay: 12s; }
+              `}</style>
+            </motion.section>
 
-                /* Keyframes for crossfade slideshow */
-                @keyframes fadeSlideshow {
-                  0% { opacity: 0; }
-                  8% { opacity: 1; }
-                  33% { opacity: 1; }
-                  41% { opacity: 0; }
-                  100% { opacity: 0; }
+
+            <section className="w-full bg-[#FCF0D6] overflow-hidden">
+              <h2 className="text-4xl font-bold mb-8 text-[#001F5B] text-center">
+                Our Sponsors
+              </h2>
+
+              <div className="relative w-full overflow-hidden">
+                <div className="flex animate-scrollLogos gap-10 w-max">
+                  {[...sponsorImages, ...sponsorImages].map((img, idx) => (
+                    <div key={idx} className="flex-shrink-0 h-24 w-48 flex items-center justify-center">
+                      <img
+                        src={img}
+                        alt={`Sponsor ${idx + 1}`}
+                        className="max-h-20 max-w-full object-contain"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <style jsx>{`
+                @keyframes scrollLogos {
+                  0% { transform: translateX(0); }
+                  100% { transform: translateX(-50%); }
+                }
+
+                .animate-scrollLogos {
+                  display: flex;
+                  width: max-content;
+                  animation: scrollLogos 15s linear infinite;
                 }
               `}</style>
-
             </section>
-
-          <section className="w-full py-8 bg-[#FCF0D6] overflow-hidden">
-  <h2 className="text-2xl font-bold mb-4 text-center text-[#001F5B]">
-    Our Sponsors
-  </h2>
-
-  <div className="relative w-full overflow-hidden">
-    <div className="flex animate-scrollLogos gap-10 w-max">
-      {[...sponsorImages, ...sponsorImages].map((img, idx) => (
-        <div key={idx} className="flex-shrink-0 h-24 w-48 flex items-center justify-center">
-          <img
-            src={img}
-            alt={`Sponsor ${idx + 1}`}
-            className="max-h-20 max-w-full object-contain"
-          />
-        </div>
-      ))}
-    </div>
-  </div>
-
-  <style jsx>{`
-    @keyframes scrollLogos {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    .animate-scrollLogos {
-      display: flex;
-      width: max-content;
-      animation: scrollLogos 15s linear infinite;
-    }
-  `}</style>
-</section>
 
 
 
 
 
             {/* Upcoming Events Section */}
-            <section className="w-full py-20 from-amber-50 via-yellow-50 to-orange-50 text-center px-6 relative overflow-hidden">
+            <section className="w-full py-12 from-amber-50 via-yellow-50 to-orange-50 text-center px-6 relative overflow-hidden">
               {/* Decorative background elements */}
               <div className="absolute top-10 left-10 w-32 h-32 bg-orange-200/30 rounded-full blur-3xl"></div>
               <div className="absolute bottom-10 right-10 w-40 h-40 bg-yellow-200/30 rounded-full blur-3xl"></div>
 
               <div className="max-w-5xl mx-auto relative z-10">
                 <div className="mb-12">
-                  <h2 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-600 bg-clip-text text-transparent">
+                  <h2 className="text-4xl font-bold mb-8 text-[#001F5B]">
                     Upcoming Events
                   </h2>
                   <p className="text-lg text-gray-700 max-w-xl mx-auto">
@@ -359,14 +364,14 @@ function Home() {
             </section>
 
             {/* Calendar Section */}
-            <section className="w-full py-20 bg-[#FCF0D6] text-center px-6">
+            <section className="w-full py-10 bg-[#FCF0D6] text-center px-6">
               <div className="max-w-6xl mx-auto">
                 <h2 className="text-4xl font-bold mb-8 text-[#001F5B]">Calendar</h2>
                 <div className="w-full rounded-xl overflow-hidden shadow-xl border-4 border-[#001F5B]">
                   <iframe
                     src="https://calendar.google.com/calendar/embed?height=500&wkst=1&bgcolor=%23EF6C00&ctz=America%2FChicago&showTabs=1&showPrint=0&mode=MONTH&showTz=0&src=ZmU5YjhvZnFxb2wxcXQ1bjYxYjZvajNvNGNAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&color=%23E67C73"
-                    style={{ border: 0, minHeight: '400px' }}
-                    className="w-full h-full sm:min-h-[500px] md:min-h-[600px] lg:min-h-[700px]"
+                    style={{ border: 0, minHeight: '500px' }}
+                    className="w-full h-full sm:min-h-[600px] md:min-h-[700px] lg:min-h-[800px]"
                     frameBorder="0"
                     scrolling="no"
                     title="UT SHPE Google Calendar"
@@ -376,17 +381,16 @@ function Home() {
             </section>
 
             {/* Office Hours Section */}
-            <section className="w-full py-20 text-center px-6">
+            <section className="w-full py-10 text-center px-6">
               <div className="max-w-5xl mx-auto">
                 <h2 className="text-4xl font-bold mb-8 text-[#001F5B]">Office Hours</h2>
                 <img
                   src={officeHoursImg}
                   alt="Office Hours"
-                  className="mx-auto w-full sm:w-4/5 lg:w-3/4 rounded-xl shadow-xl"
+                  className="mx-auto w-full sm:w-11/12 lg:w-5/6 rounded-xl shadow-xl"
                 />
               </div>
             </section>
-
           </main>
 
           <Footer />
