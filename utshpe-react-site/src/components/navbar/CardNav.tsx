@@ -1,6 +1,6 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
-// use your own icon import if react-icons is not available
+import { Link, useLocation } from 'react-router-dom'; // <-- import Link
 import { GoArrowUpRight } from 'react-icons/go';
 import './CardNav.css';
 
@@ -47,6 +47,7 @@ const CardNav: React.FC<CardNavProps> = ({
   const navRef = useRef<HTMLDivElement | null>(null);
   const cardsRef = useRef<HTMLDivElement[]>([]);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const location = useLocation();
 
   const calculateHeight = () => {
     const navEl = navRef.current;
@@ -82,25 +83,24 @@ const CardNav: React.FC<CardNavProps> = ({
   };
 
   const createTimeline = useCallback(() => {
-  const navEl = navRef.current;
-  if (!navEl) return null;
+    const navEl = navRef.current;
+    if (!navEl) return null;
 
-  gsap.set(navEl, { height: 60, overflow: 'hidden' });
-  gsap.set(cardsRef.current, { y: 50, opacity: 0 });
+    gsap.set(navEl, { height: 60, overflow: 'hidden' });
+    gsap.set(cardsRef.current, { y: 50, opacity: 0 });
 
-  const tl = gsap.timeline({ paused: true });
+    const tl = gsap.timeline({ paused: true });
 
-  tl.to(navEl, {
-    height: calculateHeight,
-    duration: 0.4,
-    ease
-  });
+    tl.to(navEl, {
+      height: calculateHeight,
+      duration: 0.4,
+      ease
+    });
 
-  tl.to(cardsRef.current, { y: 0, opacity: 1, duration: 0.4, ease, stagger: 0.08 }, '-=0.1');
+    tl.to(cardsRef.current, { y: 0, opacity: 1, duration: 0.4, ease, stagger: 0.08 }, '-=0.1');
 
-  return tl;
-}, [ease]); // add dependencies used inside
-
+    return tl;
+  }, [ease]);
 
   useLayoutEffect(() => {
     const tl = createTimeline();
@@ -157,6 +157,16 @@ const CardNav: React.FC<CardNavProps> = ({
     if (el) cardsRef.current[i] = el;
   };
 
+  useEffect(() => {
+    setIsExpanded(false);
+    setIsHamburgerOpen(false);
+
+    if(tlRef.current){
+      tlRef.current.progress(0).pause();
+      if(navRef.current) gsap.set(navRef.current, { height: 60});
+    }
+  }, [location]);
+
   return (
     <div className={`card-nav-container ${className}`}>
       <nav ref={navRef} className={`card-nav ${isExpanded ? 'open' : ''}`} style={{ backgroundColor: baseColor }}>
@@ -174,15 +184,20 @@ const CardNav: React.FC<CardNavProps> = ({
           </div>
 
           <div className="logo-container">
-          {logoHref ? (
-            <a href={logoHref}>
+            {logoHref ? (
+              logoHref.startsWith('/') ? (
+                <Link to={logoHref}>
+                  <img src={logo} alt={logoAlt} className="logo" />
+                </Link>
+              ) : (
+                <a href={logoHref} target="_blank" rel="noopener noreferrer">
+                  <img src={logo} alt={logoAlt} className="logo" />
+                </a>
+              )
+            ) : (
               <img src={logo} alt={logoAlt} className="logo" />
-            </a>
-          ) : (
-            <img src={logo} alt={logoAlt} className="logo" />
-          )}
-        </div>
-
+            )}
+          </div>
 
           <button
             type="button"
@@ -204,14 +219,34 @@ const CardNav: React.FC<CardNavProps> = ({
               <div className="nav-card-label">{item.label}</div>
               <div className="nav-card-links">
                 {item.links?.map((lnk, i) => {
-                const Icon = GoArrowUpRight as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
-                return (
-                  <a key={`${lnk.label}-${i}`} className="nav-card-link" href={lnk.href} aria-label={lnk.ariaLabel}>
-                    <Icon className="nav-card-link-icon" aria-hidden="true" />
-                    {lnk.label}
-                  </a>
-                );
-              })}
+                  const Icon = GoArrowUpRight as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
+                  const isInternal = lnk.href.startsWith('/');
+
+                  return isInternal ? (
+                    <Link
+                      key={`${lnk.label}-${i}`}
+                      to={lnk.href}
+                      className="nav-card-link"
+                      aria-label={lnk.ariaLabel}
+                      onClick={() => setIsExpanded(false)}
+                    >
+                      <Icon className="nav-card-link-icon" aria-hidden="true" />
+                      {lnk.label}
+                    </Link>
+                  ) : (
+                    <a
+                      key={`${lnk.label}-${i}`}
+                      href={lnk.href}
+                      className="nav-card-link"
+                      aria-label={lnk.ariaLabel}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Icon className="nav-card-link-icon" aria-hidden="true" />
+                      {lnk.label}
+                    </a>
+                  );
+                })}
               </div>
             </div>
           ))}
