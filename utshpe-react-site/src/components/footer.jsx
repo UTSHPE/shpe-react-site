@@ -1,33 +1,60 @@
 import React from "react";
 
-function Footer() {
-  return (
-    <footer className="relative w-full bg-[#001F5B] text-white pt-14 pb-10 mt-20 overflow-hidden">
+function Footer({ theme = "default" }) {
 
-      {/* Thin animated orange bar */}
-      <div className="absolute inset-x-0 top-0 h-[3px] bg-[#FD652F] animate-pulse" />
+  // THEMES
+  const themes = {
+    default: {
+      bg: "bg-[#001F5B]",
+      bar: "bg-[#FD652F]",
+      heading: "#FD652F",
+      text: "#FCF0D6",
+      label: "#72A9BE",
+      icon: "#FCF0D6",
+      iconHover: "#FD652F",
+      copyright: "#72A9BE",
+    },
+    shpetinas: {
+      bg: "bg-[#FFE6EE]",
+      bar: "bg-pink-400",
+      heading: "#C2185B",
+      text: "#9D4766",
+      label: "#C2185B",
+      icon: "#B85C85",
+      iconHover: "#C2185B",
+      copyright: "#C2185B",
+    }
+  };
+
+  const t = themes[theme];
+
+  return (
+    <footer className={`relative w-full ${t.bg} pt-14 pb-10 mt-20 overflow-hidden text-white`}>
+
+      {/* Top bar */}
+      <div className={`absolute inset-x-0 top-0 h-[3px] ${t.bar} animate-pulse`} />
 
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
 
-        {/* LEFT — Organization */}
+        {/* LEFT */}
         <div>
-          <h3 className="text-2xl font-bold" style={{ color: "#FD652F" }}>
+          <h3 className="text-2xl font-bold" style={{ color: t.heading }}>
             UT SHPE
           </h3>
-          <p className="text-sm mt-2" style={{ color: "#FCF0D6" }}>
+          <p className="text-sm mt-2" style={{ color: t.text }}>
             Empowering Hispanic students in STEM through community, mentorship,
             and professional development.
           </p>
         </div>
 
-        {/* CENTER — Contact */}
+        {/* CENTER */}
         <div className="space-y-3">
-          <h4 className="text-lg font-semibold" style={{ color: "#FD652F" }}>
+          <h4 className="text-lg font-semibold" style={{ color: t.heading }}>
             Contact Us
           </h4>
 
-          <p className="text-sm" style={{ color: "#FCF0D6" }}>
-            <span className="font-medium" style={{ color: "#72A9BE" }}>
+          <p className="text-sm" style={{ color: t.text }}>
+            <span className="font-medium" style={{ color: t.label }}>
               Primary Email:
             </span>{" "}
             <a href="mailto:shpe.ut.president@gmail.com" className="hover:opacity-100 opacity-80 transition">
@@ -35,8 +62,8 @@ function Footer() {
             </a>
           </p>
 
-          <p className="text-sm" style={{ color: "#FCF0D6" }}>
-            <span className="font-medium" style={{ color: "#72A9BE" }}>
+          <p className="text-sm" style={{ color: t.text }}>
+            <span className="font-medium" style={{ color: t.label }}>
               Corporate Email:
             </span>{" "}
             <a href="mailto:utshpe@gmail.com" className="hover:opacity-100 opacity-80 transition">
@@ -49,15 +76,15 @@ function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block mt-3 font-semibold transition"
-            style={{ color: "#FD652F" }}
+            style={{ color: t.heading }}
           >
             Visit our Linktree →
           </a>
         </div>
 
-        {/* RIGHT — Social Icons */}
+        {/* RIGHT — Socials */}
         <div>
-          <h4 className="text-lg font-semibold mb-3" style={{ color: "#FD652F" }}>
+          <h4 className="text-lg font-semibold mb-3" style={{ color: t.heading }}>
             Follow Us
           </h4>
 
@@ -75,6 +102,7 @@ function Footer() {
                 href={s.link}
                 className="footer-icon"
                 aria-label={s.icon}
+                style={{ color: t.icon }}
               >
                 <i className={`fa-brands ${s.icon}`}></i>
               </a>
@@ -84,7 +112,7 @@ function Footer() {
 
       </div>
 
-      <div className="text-center text-sm mt-10" style={{ color: "#72A9BE" }}>
+      <div className="text-center text-sm mt-10" style={{ color: t.copyright }}>
         © {new Date().getFullYear()} UT SHPE. All Rights Reserved.
       </div>
 
@@ -92,13 +120,11 @@ function Footer() {
       <style>
         {`
           .footer-icon {
-            color: #FCF0D6;
             transition: transform 0.25s ease, color 0.25s ease;
           }
-
           .footer-icon:hover {
             transform: translateY(-4px) scale(1.2);
-            color: #FD652F;
+            color: ${t.iconHover};
           }
         `}
       </style>
