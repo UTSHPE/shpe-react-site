@@ -114,9 +114,11 @@ function Home() {
           src={blankBevoVideo}
           autoPlay
           muted
+          playsInline
           className="absolute inset-0 w-full h-full object-cover z-10"
         />
       )}
+
 
       {/* LOGO ANIMATION */}
       {showLogoIntro && (
