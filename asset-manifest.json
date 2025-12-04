@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/shpe-react-site/static/css/main.0788f259.css",
-    "main.js": "/shpe-react-site/static/js/main.b8d4c0bb.js",
+    "main.css": "/shpe-react-site/static/css/main.80f215a8.css",
+    "main.js": "/shpe-react-site/static/js/main.ea48f565.js",
     "static/js/453.c9e502a8.chunk.js": "/shpe-react-site/static/js/453.c9e502a8.chunk.js",
     "static/media/Memberofmonth.png": "/shpe-react-site/static/media/Memberofmonth.599711fddf3d3f0f95be.png",
     "static/media/ProfessionalDevelopment.png": "/shpe-react-site/static/media/ProfessionalDevelopment.df104e6f5bd7ac3802fd.png",
@@ -82,12 +82,12 @@
     "static/media/ChapterDevIcon.png": "/shpe-react-site/static/media/ChapterDevIcon.e28bb7c692f648c9f4f2.png",
     "static/media/Spectrum_logo.png": "/shpe-react-site/static/media/Spectrum_logo.c96ea03524a2ce6e601b.png",
     "index.html": "/shpe-react-site/index.html",
-    "main.0788f259.css.map": "/shpe-react-site/static/css/main.0788f259.css.map",
-    "main.b8d4c0bb.js.map": "/shpe-react-site/static/js/main.b8d4c0bb.js.map",
+    "main.80f215a8.css.map": "/shpe-react-site/static/css/main.80f215a8.css.map",
+    "main.ea48f565.js.map": "/shpe-react-site/static/js/main.ea48f565.js.map",
     "453.c9e502a8.chunk.js.map": "/shpe-react-site/static/js/453.c9e502a8.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.0788f259.css",
-    "static/js/main.b8d4c0bb.js"
+    "static/css/main.80f215a8.css",
+    "static/js/main.ea48f565.js"
   ]
 }
