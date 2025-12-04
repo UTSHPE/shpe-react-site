@@ -1,15 +1,30 @@
 // Leadership.jsx
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Footer from "../components/footer";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import Longhorn from "../assets/web_design/longhorn_logo.png"
-import team from "../assets/leadership/Leadershipteam.png"
+import Longhorn from "../assets/web_design/longhorn_logo.png";
+import team from "../assets/leadership/Leadershipteam.png";
+
+
+function useMediaQuery(query) {
+  const [matches, setMatches] = React.useState(false);
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+    const media = window.matchMedia(query);
+    const listener = () => setMatches(media.matches);
+    listener();
+    media.addEventListener("change", listener);
+    return () => media.removeEventListener("change", listener);
+  }, [query]);
+
+  return matches;
+}
 
 const importAll = (r) => {
   let images = {};
   r.keys().forEach((key) => {
-    images[key.replace('./', '')] = r(key);
+    images[key.replace("./", "")] = r(key);
   });
   return images;
 };
@@ -18,7 +33,9 @@ const leadershipImages = importAll(
   require.context("../assets/leadership", false, /\.(png|jpe?g|svg)$/)
 );
 
-// Example placeholder profiles
+// ------------------------------
+// Data
+// ------------------------------
 const executiveBoard = [
   { name: "Genesis Aguirre", pronouns: "She/Her", role: "President", major: "Civil Engineering", image: "Genesis.png" },
   { name: "Alberto Rayon Cardenas", pronouns: "He/Him", role: "Vice President External", major: "Mechanical Engineering", image: "Alberto.png" },
@@ -37,79 +54,78 @@ const boardOfDirectors = [
   { name: "Kevin Contreras", pronouns: "He/Him", role: "Technical Director", major: "Mechanical Engineering", image: "Kevin.png" }
 ];
 
-// ProfileCard with deck animation and spotlight effect
-const ProfileCard = ({ member, index, hoveredCard, setHoveredCard, cardId, isInView }) => {
+// ------------------------------
+// ProfileCard Component
+// ------------------------------
+const ProfileCard = ({ member, index, hoveredCard, setHoveredCard, cardId, isInView, isMobile }) => {
   const isHovered = hoveredCard === cardId;
   const isDimmed = hoveredCard !== null && hoveredCard !== cardId;
 
   return (
     <motion.div
-      initial={{ 
-        x: -100,
-        y: -200,
-        rotate: -15 + (index * 2),
-        scale: 0.9,
-        opacity: 0,
-        zIndex: index
-      }}
-      animate={isInView ? { 
-        x: 0,
-        y: 0,
-        rotate: 0,
-        scale: 1,
-        opacity: isDimmed ? 0.4 : 1,
-        zIndex: isHovered ? 50 : index
-      } : {
-        x: -100,
-        y: -200,
-        rotate: -15 + (index * 2),
-        scale: 0.9,
-        opacity: 0,
-        zIndex: index
-      }}
-      transition={{ 
-        delay: index * 0.15,
-        type: "spring",
-        stiffness: 120,
-        damping: 15,
-        opacity: { duration: 0.3 }
-      }}
-      whileHover={{ 
-        scale: 1.08,
-        y: -10,
-        transition: { duration: 0.3 }
-      }}
-      onHoverStart={() => setHoveredCard(cardId)}
-      onHoverEnd={() => setHoveredCard(null)}
+      initial={
+        isMobile
+          ? false
+          : { opacity: 0, y: 40, scale: 0.9 }
+      }
+      animate={
+        isMobile
+          ? { opacity: 1, scale: 1 }
+          : isInView
+            ? {
+                opacity: isDimmed ? 0.4 : 1,
+                y: 0,
+                scale: 1,
+                zIndex: isHovered ? 50 : index
+              }
+            : {}
+      }
+      transition={
+        isMobile
+          ? { duration: 0 }
+          : {
+              delay: index * 0.15,
+              type: "spring",
+              stiffness: 120,
+              damping: 12
+            }
+      }
+      whileHover={
+        isMobile
+          ? {}
+          : { scale: 1.08, y: -10 }
+      }
+      onHoverStart={() => !isMobile && setHoveredCard(cardId)}
+      onHoverEnd={() => !isMobile && setHoveredCard(null)}
       className="relative rounded-2xl overflow-hidden w-64 h-[420px] cursor-pointer shadow-lg glass-card flex flex-col"
-      style={{ 
-        backdropFilter: "blur(10px)", 
+      style={{
+        backdropFilter: "blur(10px)",
         background: "rgba(255, 255, 255, 0.15)",
-        boxShadow: isHovered ? "0 20px 40px rgba(253, 101, 47, 0.4)" : "0 10px 30px rgba(0, 0, 0, 0.1)"
+        boxShadow: isHovered
+          ? "0 20px 40px rgba(253, 101, 47, 0.4)"
+          : "0 10px 30px rgba(0, 0, 0, 0.1)"
       }}
     >
-      {/* Top gradient band */}
+      {/* Top Gradient Banner */}
       <div className="h-16 w-full bg-gradient-to-r from-[#FD652F] to-[#72A9BE] rounded-t-2xl relative flex-shrink-0">
-        {/* Longhorn logo */}
         <img
           src={Longhorn}
-          alt="Longhorn Logo"
+          alt="Logo"
           className="absolute top-2 right-3 w-12 h-12 object-contain"
         />
       </div>
 
-      {/* Profile Image */}
+      {/* Image */}
       <div className="mt-6 flex justify-center flex-shrink-0">
         <motion.img
           src={leadershipImages[member.image]}
           alt={member.name}
           className="w-36 h-36 object-cover rounded-full border-4 border-white shadow-md"
-          whileHover={{ scale: 1.1, rotate: 5 }}
-          transition={{ duration: 0.3 }}
+          whileHover={isMobile ? {} : { scale: 1.1, rotate: 5 }}
         />
       </div>
 
-      {/* Info */}
+      {/* Text Info */}
       <div className="p-6 text-center flex-grow flex flex-col justify-center">
         <h3 className="text-xl font-bold mb-1 text-[#001F5B]">{member.name}</h3>
         <p className="text-sm text-gray-600 mb-2">{member.pronouns}</p>
@@ -120,16 +136,48 @@ const ProfileCard = ({ member, index, hoveredCard, setHoveredCard, cardId, isInV
   );
 };
 
-// Section wrapper with scroll-triggered animation
+// ------------------------------
+// CardGrid
+// ------------------------------
+const CardGrid = ({ members, cardPrefix, hoveredCard, setHoveredCard }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px", amount: 0.2 });
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
+  return (
+    <div
+      ref={ref}
+      className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 place-items-center"
+    >
+      {members.map((member, idx) => (
+        <ProfileCard
+          key={idx}
+          member={member}
+          index={idx}
+          hoveredCard={hoveredCard}
+          setHoveredCard={setHoveredCard}
+          cardId={`${cardPrefix}-${idx}`}
+          isInView={isMobile ? true : isInView}
+          isMobile={isMobile}
+        />
+      ))}
+    </div>
+  );
+};
+
+// ------------------------------
+// Animated Section Wrapper
+// ------------------------------
 const AnimatedSection = ({ children, className, bgColor = "transparent" }) => {
   const ref = useRef(null);
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
     <motion.section
       ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+      initial={isMobile ? false : { opacity: 0, y: 50 }}
+      animate={isMobile ? { opacity: 1 } : { opacity: isInView ? 1 : 0, y: isInView ? 0 : 50 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={className}
       style={{ backgroundColor: bgColor }}
@@ -139,28 +187,9 @@ const AnimatedSection = ({ children, className, bgColor = "transparent" }) => {
   );
 };
 
-// Card grid with scroll detection
-const CardGrid = ({ members, cardPrefix, hoveredCard, setHoveredCard }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px", amount: 0.2 });
-
-  return (
-    <div ref={ref} className="max-w-6xl mx-auto flex flex-wrap justify-center gap-6">
-      {members.map((member, idx) => (
-        <ProfileCard 
-          key={idx} 
-          member={member} 
-          index={idx}
-          hoveredCard={hoveredCard}
-          setHoveredCard={setHoveredCard}
-          cardId={`${cardPrefix}-${idx}`}
-          isInView={isInView}
-        />
-      ))}
-    </div>
-  );
-};
-
+// ------------------------------
+// Main Leadership Component
+// ------------------------------
 function Leadership() {
   const [hoveredCard, setHoveredCard] = useState(null);
 
@@ -173,7 +202,6 @@ function Leadership() {
         transition={{ duration: 0.8 }}
         className="w-full py-32 md:py-40 px-6 bg-gradient-to-r from-[#FD652F] to-[#72A9BE] text-white flex flex-col md:flex-row items-center justify-center gap-10"
       >
-        {/* Text */}
         <div className="md:w-1/2 text-center md:text-left">
           <motion.h1
             initial={{ y: -30, opacity: 0 }}
@@ -189,15 +217,13 @@ function Leadership() {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="text-lg md:text-xl"
           >
-            These are the amazing, determined individuals who make up our leaderSHPE team! Each
-            of them carries vital responsibilities that sustain our chapter's vision and mission.
+            These are the determined individuals who sustain our mission and help lead our chapter.
           </motion.p>
         </div>
 
-        {/* Image */}
         <motion.img
           src={team}
-          alt="UT-SHPE Team 2025-2026"
+          alt="UT SHPE Team"
           className="md:w-1/2 w-full rounded-xl shadow-2xl"
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -207,17 +233,18 @@ function Leadership() {
 
       {/* Executive Board */}
       <AnimatedSection className="w-full py-16 px-6">
-        <motion.h2 
+        <motion.h2
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
           transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
           className="text-3xl md:text-4xl font-bold text-[#001F5B] mb-10 text-center"
         >
           Executive Board
         </motion.h2>
-        <CardGrid 
-          members={executiveBoard} 
+
+        <CardGrid
+          members={executiveBoard}
           cardPrefix="exec"
           hoveredCard={hoveredCard}
           setHoveredCard={setHoveredCard}
@@ -226,17 +253,18 @@ function Leadership() {
 
       {/* Board of Directors */}
       <AnimatedSection className="w-full py-16 px-6" bgColor="white">
-        <motion.h2 
+        <motion.h2
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
           transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
           className="text-3xl md:text-4xl font-bold text-[#001F5B] mb-10 text-center"
         >
           Board of Directors
         </motion.h2>
-        <CardGrid 
-          members={boardOfDirectors} 
+
+        <CardGrid
+          members={boardOfDirectors}
           cardPrefix="director"
           hoveredCard={hoveredCard}
           setHoveredCard={setHoveredCard}
